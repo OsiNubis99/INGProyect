@@ -6,15 +6,16 @@ var {
 } = require('pg');
 var bcrypt = require('bcryptjs');
 
-const datosdb = {
-  user: "postgres",
-  password: "root",
-  database: "postgres",
-  port: 5432,
-  host: "localhost",
-  ssl: true
-}
-/*{
+const datosdb = 
+// {
+//   user: "postgres",
+//   password: "root",
+//   database: "postgres",
+//   port: 5432,
+//   host: "localhost",
+//   ssl: true
+// }
+{
   user: "osdmeqpylslznh",
   password: "451994ddda6585739cb45de567d5901b5ff7c9b5a80e3acc8e5066792af2ecea",
   database: "d4u0fuis94bmbi",
@@ -22,7 +23,13 @@ const datosdb = {
   host: "ec2-54-83-36-37.compute-1.amazonaws.com",
   ssl: true
 }
-*/
+
+// router.use(function(req, res, next) {
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//   next();
+// });
+
 //Lista todos los usuarios del sistema
 router.get('/Listar', async (req, res) => {
   var cliente = new Client(datosdb);
@@ -133,17 +140,17 @@ router.put('/Editar', async (req, res) => {
   var cliente = new Client(datosdb);
   await cliente.connect();
   await cliente.query("UPDATE usuarios SET nombre='" + req.body.nombre + "', apellido='" + req.body.apellido + "', cargo=" + req.body.cargo + ", clave='" + bcrypt.hashSync(req.body.clave, 10) + "', clavetemporal=" + req.body.clavetemporal + ", intentos=" + req.body.intentos + " WHERE codigoempleado='" + req.body.codigoempleado + "' RETURNING *")
-  .then((respuesta) => {
-    if (respuesta.rowCount == 1) {
-      res.json(respuesta.rows);
-    } else {
-      res.json(false);
-    }
-  }).catch((err) => {
-    res.json({
-      error: "Error del servidor: " + err
+    .then((respuesta) => {
+      if (respuesta.rowCount == 1) {
+        res.json(respuesta.rows);
+      } else {
+        res.json(false);
+      }
+    }).catch((err) => {
+      res.json({
+        error: "Error del servidor: " + err
+      });
     });
-  });
   await cliente.end();
 });
 //retorna true si se elimino el usuario
@@ -151,17 +158,17 @@ router.delete('/Eliminar', async (req, res) => {
   var cliente = new Client(datosdb);
   await cliente.connect();
   await cliente.query("delete from usuarios where codigoempleado='" + req.body.codigoempleado + "' RETURNING *")
-  .then((respuesta) => {
-    if (respuesta.rowCount == 1) {
-      res.json(true);
-    } else {
-      res.json(false);
-    }
-  }).catch((err) => {
-    res.json({
-      error: "Error del servidor: " + err
+    .then((respuesta) => {
+      if (respuesta.rowCount == 1) {
+        res.json(true);
+      } else {
+        res.json(false);
+      }
+    }).catch((err) => {
+      res.json({
+        error: "Error del servidor: " + err
+      });
     });
-  });
   await cliente.end();
 });
 
