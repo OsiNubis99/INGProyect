@@ -6,8 +6,14 @@ var {
 } = require('pg');
 var bcrypt = require('bcryptjs');
 
-const datosdb = 
-// {
+router.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
+// const datosdb = {
 //   user: "postgres",
 //   password: "root",
 //   database: "postgres",
@@ -15,7 +21,7 @@ const datosdb =
 //   host: "localhost",
 //   ssl: true
 // }
-{
+const datosdb =  {
   user: "osdmeqpylslznh",
   password: "451994ddda6585739cb45de567d5901b5ff7c9b5a80e3acc8e5066792af2ecea",
   database: "d4u0fuis94bmbi",
@@ -24,17 +30,12 @@ const datosdb =
   ssl: true
 }
 
-// router.use(function(req, res, next) {
-//   res.header("Access-Control-Allow-Origin", "*");
-//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-//   next();
-// });
 
 //Lista todos los usuarios del sistema
 router.get('/Listar', async (req, res) => {
   var cliente = new Client(datosdb);
   await cliente.connect();
-  await cliente.query("SELECT * FROM usuarios")
+  await cliente.query("SELECT * FROM usuarios order by nombre")
     .then((datos) => {
       res.json(datos.rows)
     }).catch((err) => {
@@ -63,14 +64,20 @@ router.post('/Iniciar', async (req, res) => {
                   error: "Error del servidor: " + err
                 });
               });
-            res.json({
-              error: "Clave o Usuario"
-            });
+            if(intentos <3){
+              res.json({
+                error: "Clave o Usuario"
+              });
+            }else {
+              res.json({
+                error: "Bloqueado"
+              });  
+            }          
           }
         } else {
           res.json({
             error: "Bloqueado"
-          })
+          });
         }
       } else {
         res.json({
@@ -106,6 +113,11 @@ router.post('/Validar', async (req, res) => {
 router.post('/Agregar', async (req, res) => {
   var cliente = new Client(datosdb);
   await cliente.connect();
+  var clave ="*01010101$".replace(/0/g, () => {
+    return (~~(Math.random() * 16)).toString(16).toUpperCase();
+  }).replace(/1/g, () => {
+    return (~~(Math.random() * 16)).toString(16);
+  });
   var codigo = "";
   await cliente.query("select count(*) from usuarios")
     .then((respuesta) => {
@@ -125,9 +137,32 @@ router.post('/Agregar', async (req, res) => {
     });
   await cliente.query("INSERT INTO usuarios (codigoempleado,nombre,apellido,nombreusuario,cargo,clave,clavetemporal,intentos)" +
       " VALUES ('" + codigo + "', '" + req.body.nombre + "', '" + req.body.apellido + "', '" + req.body.nombreusuario + "', " +
-      req.body.cargo + ", '" + bcrypt.hashSync(req.body.clave, 10) + "', true, 0) RETURNING *;")
+      req.body.cargo + ", '" + bcrypt.hashSync(clave, 10) + "', true, 0);")
+    .then(() => {
+      res.json(clave);
+    }).catch((err) => {
+      res.json({
+        error: "Error del servidor: " + err
+      });
+    });
+  await cliente.end();
+});
+//retorna un bool, true si se puede usar un nombre de usuario
+router.post('/Desbloquear', async (req, res) => {
+  var cliente = new Client(datosdb);
+  var clave ="*01010101$".replace(/0/g, () => {
+    return (~~(Math.random() * 16)).toString(16).toUpperCase();
+  }).replace(/1/g, () => {
+    return (~~(Math.random() * 16)).toString(16);
+  });
+  await cliente.connect();
+  await cliente.query("UPDATE usuarios SET clave='" + bcrypt.hashSync(clave, 10) + "', clavetemporal=true , intentos=0 WHERE codigoempleado='" + req.body.codigoempleado + "' RETURNING *")
     .then((respuesta) => {
-      res.json(respuesta.rows);
+      if (respuesta.rowCount == 1) {
+        res.json(clave);
+      } else {
+        res.json(false);
+      }
     }).catch((err) => {
       res.json({
         error: "Error del servidor: " + err
@@ -136,13 +171,18 @@ router.post('/Agregar', async (req, res) => {
   await cliente.end();
 });
 //retorna el nuevo estado del usuario
-router.put('/Editar', async (req, res) => {
+router.post('/Editar', async (req, res) => {
   var cliente = new Client(datosdb);
+  var query = "UPDATE usuarios SET nombre='" + req.body.nombre + "', apellido='" +req.body.apellido+"', nombreusuario='"+req.body.nombreusuario+"'"
+  if(req.body.clavetemporal){
+    query+=", clave='"+bcrypt.hashSync(req.body.clave, 10)+"', clavetemporal=false"
+  } 
+  query+=" WHERE codigoempleado='" + req.body.codigoempleado + "' RETURNING *"
   await cliente.connect();
-  await cliente.query("UPDATE usuarios SET nombre='" + req.body.nombre + "', apellido='" + req.body.apellido + "', cargo=" + req.body.cargo + ", clave='" + bcrypt.hashSync(req.body.clave, 10) + "', clavetemporal=" + req.body.clavetemporal + ", intentos=" + req.body.intentos + " WHERE codigoempleado='" + req.body.codigoempleado + "' RETURNING *")
+  await cliente.query(query)
     .then((respuesta) => {
       if (respuesta.rowCount == 1) {
-        res.json(respuesta.rows);
+        res.json(true);
       } else {
         res.json(false);
       }
@@ -154,10 +194,10 @@ router.put('/Editar', async (req, res) => {
   await cliente.end();
 });
 //retorna true si se elimino el usuario
-router.delete('/Eliminar', async (req, res) => {
+router.post('/Eliminar', async (req, res) => {
   var cliente = new Client(datosdb);
   await cliente.connect();
-  await cliente.query("delete from usuarios where codigoempleado='" + req.body.codigoempleado + "' RETURNING *")
+  await cliente.query("UPDATE usuarios SET  intentos=4 WHERE codigoempleado='" + req.body.codigoempleado + "' RETURNING *")
     .then((respuesta) => {
       if (respuesta.rowCount == 1) {
         res.json(true);

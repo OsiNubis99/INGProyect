@@ -18,9 +18,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 //routs
 app.use('/REST/Usuarios', require('./routes/usuarios'));
 app.use('/REST/Centrales', require('./routes/centrales'));
+app.get('/',(req, res)=>{
+    res.redirect('/')
+})
 
 
 //listening
 app.listen(app.get("Port"), () => {
-    console.log("Localhost:", app.get("Port"));
+    console.log("Localhost:"+app.get("Port"));
 });
