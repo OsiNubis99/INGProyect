@@ -30,7 +30,6 @@ const datosdb =  {
   ssl: true
 }
 
-
 //Lista todos los usuarios del sistema
 router.get('/Listar', async (req, res) => {
   var cliente = new Client(datosdb);
