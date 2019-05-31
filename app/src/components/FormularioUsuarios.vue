@@ -229,10 +229,12 @@
 							if (this.formulario.estado == 'Clave') {
 								this.cerrar();
 							}
-							this.$store.state.perfil.nombre = this.formulario.nombre;
-							this.$store.state.perfil.apellido = this.formulario.apellido;
-							this.$store.state.perfil.nombreusuario = this.formulario.nombreusuario;
-							this.$store.state.perfil.clavetemporal = false;
+							if(this.formulario.codigoempleado == this.$store.state.perfil.codigoempleado){
+								this.$store.state.perfil.nombre = this.formulario.nombre;
+								this.$store.state.perfil.apellido = this.formulario.apellido;
+								this.$store.state.perfil.nombreusuario = this.formulario.nombreusuario;
+								this.$store.state.perfil.clavetemporal = false;
+							}
 							this.$store.state.error = {
 								estado: true,
 								tipo: 'bien',
