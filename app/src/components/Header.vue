@@ -29,7 +29,7 @@
           <v-toolbar-side-icon @click="$store.state.navegacion = !$store.state.navegacion"></v-toolbar-side-icon>
           <router-link to="/">
             <v-btn flat>
-              HidroTeam
+              Hidro Team
             </v-btn>
           </router-link>
           <v-spacer></v-spacer>
