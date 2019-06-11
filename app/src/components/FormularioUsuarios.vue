@@ -96,7 +96,7 @@
 			async validar() {
 				if (this.formulario.newnombreusuario.length > 3 && this.formulario.newnombreusuario.length < 13) {
 					this.valido = null;
-					await this.axios.post("https://teamhidro.herokuapp.com/REST/Usuarios/Validar", {
+					await this.axios.post("/REST/Usuarios/Validar", {
 							nombreusuario: this.formulario.newnombreusuario
 						})
 						.then((response) => {
@@ -147,7 +147,7 @@
                         titulo: "Cargando...",
                         info: "Esto puede tomar unos minutos"
                     }
-					await this.axios.post("https://teamhidro.herokuapp.com/REST/Usuarios/Agregar",{
+					await this.axios.post("/REST/Usuarios/Agregar",{
 						nombre: this.formulario.nombre,
 						apellido: this.formulario.apellido,
 						cargo: this.formulario.cargo,
@@ -161,6 +161,7 @@
 									titulo: "Usuario Agregado",
 									info: 'La Clave Temporal es: ' + response.data
 								}
+								this.cerrar();
 							} else {
 								this.$store.state.error = {
 									estado: true,
@@ -217,7 +218,7 @@
                         titulo: "Cargando...",
                         info: "Esto puede tomar unos minutos"
                     }
-					await this.axios.post("https://teamhidro.herokuapp.com/REST/Usuarios/Editar", {
+					await this.axios.post("/REST/Usuarios/Editar", {
 							nombreusuario: this.formulario.newnombreusuario,
 							nombre: this.formulario.nombre,
 							apellido: this.formulario.apellido,
@@ -226,9 +227,6 @@
 							clavetemporal: this.formulario.clavetemporal
 						})
 						.then(() => {
-							if (this.formulario.estado == 'Clave') {
-								this.cerrar();
-							}
 							if(this.formulario.codigoempleado == this.$store.state.perfil.codigoempleado){
 								this.$store.state.perfil.nombre = this.formulario.nombre;
 								this.$store.state.perfil.apellido = this.formulario.apellido;
@@ -241,6 +239,7 @@
 								titulo: "Datos Actualizados",
 								info: 'Los datos fueron actualizados'
 							}
+							this.cerrar();
 						})
 						.catch((error) => {
 							this.$store.state.error = {
