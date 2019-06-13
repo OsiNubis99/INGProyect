@@ -172,7 +172,7 @@
     </v-card>
 </template>
 
-<style>
+<style scoped>
     table,
     thead {
         border-collapse: collapse;
