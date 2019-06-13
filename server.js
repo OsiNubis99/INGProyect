@@ -7,7 +7,7 @@ const app = express();
 
 //settings
 app.set("Port", process.env.PORT || 3000);
-var cliente = new Client(require('./config/heroku'));
+var cliente = new Client(require('./config/bd'));
 cliente.connect()
 .then(() => console.log('DB is connected'))
 .catch(err => console.error(err));

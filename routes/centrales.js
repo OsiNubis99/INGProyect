@@ -14,15 +14,10 @@ router.get('/Listar', function(req, res, next) {
   centrales.listar(res);
 });
 router.post('/Agregar', async (req, res) => {
-  req.body.clave = "*01010101$".replace(/0/g, () => {
-    return (~~(Math.random() * 16)).toString(16).toUpperCase();
-  }).replace(/1/g, () => {
-    return (~~(Math.random() * 16)).toString(16);
-  });
-  centrales.agregar(req.body, res, bcrypt);
+  centrales.agregar(req.body, res);
 });
 router.post('/Editar', async (req, res) => {
-centrales.editar(req.body, res, bcrypt);
+centrales.editar(req.body, res);
 });
 
 module.exports = router;

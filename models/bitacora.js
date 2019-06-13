@@ -1,7 +1,7 @@
 const {
 	Pool
 } = require('pg');
-var db = new Pool(require('../config/heroku'));
+var db = new Pool(require('../config/bd'));
 var error = {
 	error: "Error del servidor"
 }

@@ -84,7 +84,7 @@
               <v-btn block flat>administrar Usuarios</v-btn>
             </v-flex>
             <v-flex v-if="perfil.cargo" xs2 @click="vista = 'Historico'">
-              <v-btn block flat>Ver Historico del Grafo</v-btn>
+              <v-btn block flat>Bitacora de Acciones</v-btn>
             </v-flex>
           </v-layout>
         </v-layout>
