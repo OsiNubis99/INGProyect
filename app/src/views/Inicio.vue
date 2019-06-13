@@ -7,6 +7,7 @@
   import Usuario from '../components/Usuario.vue';
   import Grafo from "../components/Grafo.vue";
   import Centrales from "../components/Centrales.vue";
+  import FormularioCentrales from "../components/FormularioCentrales.vue";
   export default {
     created() {
       if (this.perfil.clavetemporal) {
@@ -34,6 +35,7 @@
       ...mapState(['perfil', 'movil'])
     },
     components: {
+      FormularioCentrales,
       FormularioUsuarios,
       Historico,
       Usuario,
@@ -100,6 +102,7 @@
       </v-card-text>
     </v-card>
     <FormularioUsuarios />
+    <FormularioCentrales />
   </v-container>
 </template>
 

@@ -3,6 +3,9 @@
         created() {
             this.listar();
         },
+        updated() {
+            this.listar();
+        },
         methods: {
             async listar() {
                 await this.axios.get("/REST/Centrales/Listar")
@@ -36,12 +39,12 @@
             <v-btn dark round color="green" @click="()=>{ 
                 $store.state.formulario = {
                     nombrecentrales:'',
-                    tipo:'',
+                    tipo:{nombre:'',id:0},
                     ciudad:'',
                     estado:'Crear',
                     titulo:'Agrega una nueva Central'
                     };  
-                $store.state.crearEditar = true; 
+                $store.state.crearCentrales = true; 
                 }">
                 <v-icon dark left>fas fa-plus</v-icon>
                 Agrega una Central
@@ -50,20 +53,37 @@
         <v-card-text>
             <v-flex class="tabla text-xs-center">
                 <h1 v-if="centrales.length == 0">
-                <v-icon class="blue--text">fas fa-spinner fa-pulse</v-icon>
+                    <v-icon class="blue--text">fas fa-spinner fa-pulse</v-icon>
                 </h1>
                 <table v-else>
                     <thead>
-											  <td class="green lighten-3">ID de la Central</td>
+                        <td class="green lighten-3">ID de la Central</td>
                         <td class="green lighten-2">Nombre de la Central</td>
-												<td class="green lighten-3">Ciudad</td>
-                        <td class="green lighten-2">Tipo de Central</td>                
+                        <td class="green lighten-3">Ciudad</td>
+                        <td class="green lighten-2">Tipo de Central</td>
+                        <td class="green lighten-3">Acciones</td>
                     </thead>
                     <tr v-for="(item, index) in centrales" :key="index">
-											  <td :class="index%2 == 0 ? 'lighten-2': 'lighten-3'" class="grey">{{item.id}}</td>
+                        <td :class="index%2 == 0 ? 'lighten-2': 'lighten-3'" class="grey">{{item.id}}</td>
                         <td :class="index%2 == 0 ? 'lighten-3': 'lighten-2'" class="grey">{{item.nombrecentrales}}</td>
                         <td :class="index%2 == 0 ? 'lighten-2': 'lighten-3'" class="grey">{{item.ciudad}}</td>
-                        <td :class="index%2 == 0 ? 'lighten-3': 'lighten-2'" class="grey">{{item.tipo==1 ? 'Central de Generacion' :item.tipo==2 ? 'Central Termoelectrica': ''}}
+                        <td :class="index%2 == 0 ? 'lighten-3': 'lighten-2'" class="grey">
+                            {{item.tipo==1 ? 'Central de Generacion' :item.tipo==2 ? 'Central Termoelectrica': ''}}
+                        </td>
+                        <td :class="index%2 == 0 ? 'lighten-2': 'lighten-3'" class="grey">
+                            <v-btn flat icon color="primary" @click="()=>{ 
+                                $store.state.formulario = {
+                                    nombrecentrales : item.nombrecentrales,
+                                    tipo : {nombre:'',id:item.tipo},
+                                    ciudad : item.ciudad,
+                                    id : item.id,
+                                    estado:'Editar',
+                                    titulo:'Editar central'
+                                    };  
+                                $store.state.crearCentrales = true; 
+                                }">
+                                <v-icon>fas fa-pencil</v-icon>
+                            </v-btn>
                         </td>
                 </table>
             </v-flex>
@@ -79,9 +99,9 @@
         width: 100%;
     }
 
-    .tabla{
+    .tabla {
         position: relative;
-        overflow: auto; 
+        overflow: auto;
         padding-bottom: .75rem
     }
 

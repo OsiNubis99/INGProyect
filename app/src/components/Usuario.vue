@@ -4,6 +4,7 @@
             this.listar();
         },
         updated() {
+            this.listar();
         },
         methods: {
             async listar() {
