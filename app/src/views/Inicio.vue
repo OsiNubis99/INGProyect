@@ -6,6 +6,7 @@
   import Historico from '../components/Historico.vue';
   import Usuario from '../components/Usuario.vue';
   import Grafo from "../components/Grafo.vue";
+  import Centrales from "../components/Centrales.vue";
   export default {
     created() {
       if (this.perfil.clavetemporal) {
@@ -36,7 +37,9 @@
       FormularioUsuarios,
       Historico,
       Usuario,
-      Grafo
+      Grafo,
+      Centrales
+
     }
   }
 </script>
@@ -74,6 +77,9 @@
             <v-flex v-if="!perfil.cargo" xs2 @click="vista = 'Grafo'">
               <v-btn block flat>Administrar Grafo</v-btn>
             </v-flex>
+            <v-flex v-if="!perfil.cargo" xs2 @click="vista = 'Centrales'">
+              <v-btn block flat>Lista de Centrales</v-btn>
+            </v-flex>
             <v-flex v-if="perfil.cargo" xs2 @click="vista = 'Usuario'">
               <v-btn block flat>administrar Usuarios</v-btn>
             </v-flex>
@@ -85,6 +91,7 @@
       </v-container>
     </v-navigation-drawer>
     <Grafo class="ma-3" v-if="vista == 'Grafo'" />
+    <Centrales class="ma-3" v-if="vista == 'Centrales'" />
     <Usuario class="ma-3" v-else-if="vista == 'Usuario'" />
     <Historico class="ma-3" v-else-if="vista == 'Historico'" />
     <v-card v-else class="text-xs-center ma-3">
