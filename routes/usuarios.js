@@ -2,6 +2,13 @@ var router = require('express').Router();
 var bcrypt = require('bcryptjs');
 var usuarios = require('../models/usuarios');
 
+router.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
 router.get('/Listar',(req, res) => {
   usuarios.listar(res);
 });
@@ -29,7 +36,7 @@ router.post('/Desbloquear', async (req, res) => {
   }).replace(/1/g, () => {
     return (~~(Math.random() * 16)).toString(16);
   });
-  usuarios.desbloquear(req.body, res);
+  usuarios.desbloquear(req.body, res, bcrypt);
 });
 
 router.post('/Editar', async (req, res) => {

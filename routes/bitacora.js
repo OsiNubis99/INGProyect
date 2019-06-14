@@ -1,5 +1,5 @@
-var express = require('express');
-var router = express.Router();
+var router = require('express').Router();
+var bitacora = require('../models/bitacora');
 
 router.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -8,10 +8,13 @@ router.use(function(req, res, next) {
   next();
 });
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+router.get('/Listar',(req, res) => {
+  bitacora.listar(res);
 });
 
+router.post('/Agregar',(req, res) => {
+  req.body.fecha = new Date().toLocaleString();
+  bitacora.agregar(req.body, res);
+});
 
 module.exports = router;

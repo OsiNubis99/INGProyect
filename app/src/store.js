@@ -11,7 +11,8 @@ export default new vuex.Store({
     movil: false,    // Controlador de la Vista
     formulario: {},  // Datos para el nuevo usuario
     crearEditar: false,// Controlador del Formulario de Usuario
-    navegacion: true // Controlador de la Navegacion
+    navegacion: true, // Controlador de la Navegacion
+    crearCentrales: false, //Controlador del Formulario de Centrales
   },
   mutations:{
     onResize(state) {

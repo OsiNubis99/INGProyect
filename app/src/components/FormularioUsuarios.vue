@@ -147,7 +147,7 @@
                         titulo: "Cargando...",
                         info: "Esto puede tomar unos minutos"
                     }
-					await this.axios.post("/REST/Usuarios/Agregar",{
+					await this.axios.post("http://localhost3000/REST/Usuarios/Agregar",{
 						nombre: this.formulario.nombre,
 						apellido: this.formulario.apellido,
 						cargo: this.formulario.cargo,
