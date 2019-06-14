@@ -41,7 +41,7 @@
                         titulo: "Cargando...",
                         info: "Esto puede tomar unos minutos"
                     }
-                    await this.axios.post("https://teamhidro.herokuapp.com/REST/Usuarios/Iniciar", {
+                    await this.axios.post("/REST/Usuarios/Iniciar", {
                             nombreusuario: this.nombreUsuario,
                             clave: this.clave
                         })

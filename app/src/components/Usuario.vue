@@ -4,11 +4,10 @@
             this.listar();
         },
         updated() {
-            this.listar();
         },
         methods: {
             async listar() {
-                await this.axios.get("https://teamhidro.herokuapp.com/REST/Usuarios/Listar")
+                await this.axios.get("/REST/Usuarios/Listar")
                     .then((response) => {
                         return response.data
                     })
@@ -25,13 +24,13 @@
                     });
             },
             async desbloquear(codigo) {
-                    this.$store.state.error = {
-                        estado: true,
-                        tipo: 'bien',
-                        titulo: "Cargando...",
-                        info: "Esto puede tomar unos minutos"
-                    }
-                await this.axios.post("https://teamhidro.herokuapp.com/REST/Usuarios/Desbloquear", {
+                this.$store.state.error = {
+                    estado: true,
+                    tipo: 'bien',
+                    titulo: "Cargando...",
+                    info: "Esto puede tomar unos minutos"
+                }
+                await this.axios.post("/REST/Usuarios/Desbloquear", {
                         codigoempleado: codigo
                     })
                     .then((data) => {
@@ -60,7 +59,7 @@
                         titulo: "Cargando...",
                         info: "Esto puede tomar unos minutos"
                     }
-                    await this.axios.post("https://teamhidro.herokuapp.com/REST/Usuarios/Eliminar", {
+                    await this.axios.post("/REST/Usuarios/Eliminar", {
                             codigoempleado: codigo + ""
                         })
                         .then((data) => {
