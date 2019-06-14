@@ -9,24 +9,14 @@
 					<v-container grid-list-md>
 						<v-layout v-if="formulario.estado == 'Crear'" wrap justify-center>
 							<v-flex xs12 sm6>
-								<v-text-field label="Nombre de Centrales" v-model="formulario.nombrecentrales" />
+								<v-text-field label="Nombre de la Central" v-model="formulario.nombrecentrales" />
 							</v-flex>
 							<v-flex xs12 sm6>
 								<v-text-field label="Ciudad" v-model="formulario.ciudad" />
 							</v-flex>
 							<v-flex xs12>
 								<v-select v-model="formulario.tipo" :items="opciones" item-text="nombre" item-value="id"
-									label="Selceciona un tipo" persistent-hint return-object single-line></v-select>
-							</v-flex>
-							<v-flex xs12>
-								<v-text-field label="Nombre de Usuario" v-model="formulario.newnombreusuario"
-									hint="Minimo 3 Caracteres - Maximo 12 Caracteres" :loading="valido==null ? true : false"
-									@keyup="validar()" :color="valido==false ? 'red' : valido ? 'green' : 'blue'"
-									:append-icon="valido==false ? 'fas fa-times-circle' : valido ? 'fas fa-check' : 'fas fa-spinner fa-pulse'" />
-							</v-flex>
-							<v-flex xs12>
-								<v-checkbox :label="formulario.cargo ? 'Cargo: Supervisor' : 'Cargo: Operador'"
-									v-model="formulario.cargo" :value="formulario.cargo" />
+									label="Selecciona un tipo" persistent-hint return-object single-line></v-select>
 							</v-flex>
 						</v-layout>
 						<v-layout v-if="formulario.estado == 'Editar'" wrap justify-center>
@@ -59,15 +49,15 @@
 		data() {
 			return {
 				opciones: [{
-						nombre: 'tipo 1',
+						nombre: 'Central de Generación',
 						id: 1
 					},
 					{
-						nombre: '2',
+						nombre: 'Central Termoeléctrica',
 						id: 2
 					},
 					{
-						nombre: '3',
+						nombre: 'Central de Distribución',
 						id: 3
 					}
 				],
@@ -76,80 +66,49 @@
 			}
 		},
 		methods: {
-			async validar() {
-				if (this.formulario.newnombreusuario.length > 3 && this.formulario.newnombreusuario.length < 13) {
-					this.valido = null;
-					await this.axios.post("/REST/Usuarios/Validar", {
-							nombreusuario: this.formulario.newnombreusuario
-						})
-						.then((response) => {
-							this.valido = response.data;
-						})
-						.catch((error) => {
-							this.$store.state.error = {
-								estado: true,
-								tipo: 'error',
-								titulo: "Error del Servidor",
-								info: error
-							}
-						});
-				} else {
-					this.valido = false;
-				}
-
-			},
 			async Agregar() {
-				if (!this.valido) {
+				 if (this.formulario.nombrecentrales.length == 0 || this.formulario.nombrecentrales.length > 50) {
 					this.$store.state.error = {
 						estado: true,
 						tipo: 'error',
-						titulo: "Nombre de Usuario",
-						info: 'El nombre de usuario esta en uso o no cumple nuestras politicas'
+						titulo: "Nombre de Central",
+						info: this.formulario.nombrecentrales.length == 0 ? 'El nombre de la central es un campo requerido' :
+							'En nombre de la central no puede superar los cincuenta(50) caracteres'
 					}
-				} else if (this.formulario.nombre.length == 0 || this.formulario.nombre.length > 50) {
+				} else if (this.formulario.ciudad.length == 0 || this.formulario.ciudad.length > 50) {
 					this.$store.state.error = {
 						estado: true,
 						tipo: 'error',
-						titulo: "Nombre",
-						info: this.formulario.nombre.length == 0 ? 'El nombre es un campo requerido' :
-							'En nombre no puede superar los cincuenta(50) caracteres'
-					}
-				} else if (this.formulario.apellido.length == 0 || this.formulario.apellido.length > 50) {
-					this.$store.state.error = {
-						estado: true,
-						tipo: 'error',
-						titulo: "Apellido",
-						info: this.formulario.apellido.length == 0 ? 'El apellido es un campo requerido' :
-							'En apellido no puede superar los cincuenta(50) caracteres'
+						titulo: "Ciudad",
+						info: this.formulario.ciudad.length == 0 ? 'La ciudad es un campo requerido' :
+							'El nombre de la ciudad no puede superar los cincuenta(50) caracteres'
 					}
 				} else {
-					this.valido = false;
 					this.$store.state.error = {
 						estado: true,
 						tipo: 'bien',
 						titulo: "Cargando...",
 						info: "Esto puede tomar unos minutos"
 					}
-					await this.axios.post("/REST/Usuarios/Agregar", {
-							nombre: this.formulario.nombre,
-							apellido: this.formulario.apellido,
-							cargo: this.formulario.cargo,
-							nombreusuario: this.formulario.newnombreusuario
+					await this.axios.post("http://localhost:3000/REST/Centrales/Agregar", {
+							nombrecentrales: this.formulario.nombrecentrales,
+							ciudad: this.formulario.ciudad,
+							tipo: this.formulario.tipo.id
 						})
 						.then((response) => {
-							if (response) {
+							if (response.data) {
 								this.$store.state.error = {
 									estado: true,
 									tipo: 'bien',
-									titulo: "Usuario Agregado",
-									info: 'La Clave Temporal es: ' + response.data
+									titulo: "Central Agregada",
+									info: ''
 								}
 								this.cerrar();
 							} else {
 								this.$store.state.error = {
 									estado: true,
 									tipo: 'error',
-									titulo: "Error Al Desbloquear",
+									titulo: "Error Al Agregar",
 									info: ''
 								}
 							}
@@ -172,7 +131,7 @@
 					titulo: "Cargando...",
 					info: "Esto puede tomar unos minutos"
 				}
-				await this.axios.post("/REST/Centrales/Editar", {
+				await this.axios.post("http://localhost:3000/REST/Centrales/Editar", {
 						nombrecentrales: this.formulario.nombrecentrales,
 						tipo: this.formulario.tipo.id,
 						ciudad: this.formulario.ciudad,

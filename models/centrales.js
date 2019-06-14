@@ -15,12 +15,13 @@ module.exports = {
 				res.json(error);
 			});
 	},
-	async agregar(datos, res) {
+	async agregar(datos, res) { 
 		await db.query("INSERT INTO centrales (nombrecentrales,tipo,ciudad)" +
-						" VALUES ('" + datos.nombrecentrales+ "', " + datos.tipo + ",'" + datos.ciudad + "' );")
+		" VALUES ('" + datos.nombrecentrales+ "', " + datos.tipo + ",'" + datos.ciudad + "' );")
 					.then(() => {
-						res.json('Guardado exitoso');
-					}).catch(() => {
+						res.json(true);
+					}).catch((err) => {
+						console.log(''+ err)
 				res.json(error);
 			});
 	},

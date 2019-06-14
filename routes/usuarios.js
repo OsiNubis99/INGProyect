@@ -36,7 +36,7 @@ router.post('/Desbloquear', async (req, res) => {
   }).replace(/1/g, () => {
     return (~~(Math.random() * 16)).toString(16);
   });
-  usuarios.desbloquear(req.body, res);
+  usuarios.desbloquear(req.body, res, bcrypt);
 });
 
 router.post('/Editar', async (req, res) => {

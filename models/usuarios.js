@@ -84,11 +84,11 @@ module.exports = {
 				res.json(error);
 			});
 	},
-	async desbloquear(datos,res){
+	async desbloquear(datos,res,bcrypt){
 		await db.query("UPDATE usuarios SET clave='" + bcrypt.hashSync(datos.clave, 10) + "', clavetemporal=true , intentos=0 WHERE codigoempleado='" + datos.codigoempleado + "' RETURNING *")
     .then((respuesta) => {
       if (respuesta.rowCount == 1) {
-        res.json(clave);
+        res.json(datos.clave);
       } else {
         res.json(false);
       }

@@ -8,7 +8,7 @@
         },
         methods: {
             async listar() {
-                await this.axios.get("/REST/Usuarios/Listar")
+                await this.axios.get("http://localhost:3000/REST/Usuarios/Listar")
                     .then((response) => {
                         return response.data
                     })
@@ -31,7 +31,7 @@
                     titulo: "Cargando...",
                     info: "Esto puede tomar unos minutos"
                 }
-                await this.axios.post("/REST/Usuarios/Desbloquear", {
+                await this.axios.post("http://localhost:3000/REST/Usuarios/Desbloquear", {
                         codigoempleado: codigo
                     })
                     .then((data) => {
@@ -60,7 +60,7 @@
                         titulo: "Cargando...",
                         info: "Esto puede tomar unos minutos"
                     }
-                    await this.axios.post("/REST/Usuarios/Eliminar", {
+                    await this.axios.post("http://localhost:3000/REST/Usuarios/Eliminar", {
                             codigoempleado: codigo + ""
                         })
                         .then((data) => {

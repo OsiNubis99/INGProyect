@@ -41,7 +41,7 @@
                         titulo: "Cargando...",
                         info: "Esto puede tomar unos minutos"
                     }
-                    await this.axios.post("/REST/Usuarios/Iniciar", {
+                    await this.axios.post("http://localhost:3000/REST/Usuarios/Iniciar", {
                             nombreusuario: this.nombreUsuario,
                             clave: this.clave
                         })

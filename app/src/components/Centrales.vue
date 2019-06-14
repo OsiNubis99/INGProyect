@@ -8,7 +8,7 @@
         },
         methods: {
             async listar() {
-                await this.axios.get("/REST/Centrales/Listar")
+                await this.axios.get("http://localhost:3000/REST/Centrales/Listar")
                     .then((response) => {
                         return response.data
                     })
@@ -36,7 +36,7 @@
 <template>
     <v-card>
         <v-card-title>
-            <v-btn dark round color="green" @click="()=>{ 
+            <v-btn dark round color="blue" @click="()=>{ 
                 $store.state.formulario = {
                     nombrecentrales:'',
                     tipo:{nombre:'',id:0},
@@ -57,18 +57,18 @@
                 </h1>
                 <table v-else>
                     <thead>
-                        <td class="green lighten-3">ID de la Central</td>
-                        <td class="green lighten-2">Nombre de la Central</td>
-                        <td class="green lighten-3">Ciudad</td>
-                        <td class="green lighten-2">Tipo de Central</td>
-                        <td class="green lighten-3">Acciones</td>
+                        <td class="blue lighten-3">ID de la Central</td>
+                        <td class="blue lighten-2">Nombre de la Central</td>
+                        <td class="blue lighten-3">Ciudad</td>
+                        <td class="blue lighten-2">Tipo de Central</td>
+                        <td class="blue lighten-3">Acciones</td>
                     </thead>
                     <tr v-for="(item, index) in centrales" :key="index">
                         <td :class="index%2 == 0 ? 'lighten-2': 'lighten-3'" class="grey">{{item.id}}</td>
                         <td :class="index%2 == 0 ? 'lighten-3': 'lighten-2'" class="grey">{{item.nombrecentrales}}</td>
                         <td :class="index%2 == 0 ? 'lighten-2': 'lighten-3'" class="grey">{{item.ciudad}}</td>
                         <td :class="index%2 == 0 ? 'lighten-3': 'lighten-2'" class="grey">
-                            {{item.tipo==1 ? 'Central de Generacion' :item.tipo==2 ? 'Central Termoelectrica': ''}}
+                            {{item.tipo==1 ? 'Central de Generacion' :item.tipo==2 ? 'Central Termoelectrica': item.tipo==3 ? 'Central de Distribucion' :  ''}}
                         </td>
                         <td :class="index%2 == 0 ? 'lighten-2': 'lighten-3'" class="grey">
                             <v-btn flat icon color="primary" @click="()=>{ 
@@ -82,9 +82,10 @@
                                     };  
                                 $store.state.crearCentrales = true; 
                                 }">
-                                <v-icon>fas fa-pencil</v-icon>
+                                <v-icon>fas fa-edit</v-icon>
                             </v-btn>
                         </td>
+                    </tr>
                 </table>
             </v-flex>
         </v-card-text>

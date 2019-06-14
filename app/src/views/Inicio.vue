@@ -93,7 +93,7 @@
       </v-container>
     </v-navigation-drawer>
     <Grafo class="ma-3" v-if="vista == 'Grafo'" />
-    <Centrales class="ma-3" v-if="vista == 'Centrales'" />
+    <Centrales class="ma-3" v-else-if="vista == 'Centrales'" />
     <Usuario class="ma-3" v-else-if="vista == 'Usuario'" />
     <Historico class="ma-3" v-else-if="vista == 'Historico'" />
     <v-card v-else class="text-xs-center ma-3">
