@@ -90,7 +90,8 @@
 						titulo: "Cargando...",
 						info: "Esto puede tomar unos minutos"
 					}
-					await this.axios.post("http://localhost:3000/REST/Centrales/Agregar", {
+					await this.axios.post("/REST/Centrales/Agregar", {
+							codigoempleado: this.$store.state.perfil.codigoempleado,
 							nombrecentrales: this.formulario.nombrecentrales,
 							ciudad: this.formulario.ciudad,
 							tipo: this.formulario.tipo.id
@@ -131,8 +132,9 @@
 					titulo: "Cargando...",
 					info: "Esto puede tomar unos minutos"
 				}
-				await this.axios.post("http://localhost:3000/REST/Centrales/Editar", {
+				await this.axios.post("/REST/Centrales/Editar", {
 						nombrecentrales: this.formulario.nombrecentrales,
+						codigoempleado: this.$store.state.perfil.codigoempleado,
 						tipo: this.formulario.tipo.id,
 						ciudad: this.formulario.ciudad,
 						id: this.formulario.id

@@ -96,7 +96,7 @@
 			async validar() {
 				if (this.formulario.newnombreusuario.length > 3 && this.formulario.newnombreusuario.length < 13) {
 					this.valido = null;
-					await this.axios.post("http://localhost:3000/REST/Usuarios/Validar", {
+					await this.axios.post("/REST/Usuarios/Validar", {
 							nombreusuario: this.formulario.newnombreusuario
 						})
 						.then((response) => {
@@ -147,7 +147,7 @@
                         titulo: "Cargando...",
                         info: "Esto puede tomar unos minutos"
                     }
-					await this.axios.post("http://localhost3000http://localhost:3000/REST/Usuarios/Agregar",{
+					await this.axios.post("http://localhost3000/REST/Usuarios/Agregar",{
 						nombre: this.formulario.nombre,
 						apellido: this.formulario.apellido,
 						cargo: this.formulario.cargo,
@@ -218,7 +218,7 @@
                         titulo: "Cargando...",
                         info: "Esto puede tomar unos minutos"
                     }
-					await this.axios.post("http://localhost:3000/REST/Usuarios/Editar", {
+					await this.axios.post("/REST/Usuarios/Editar", {
 							nombreusuario: this.formulario.newnombreusuario,
 							nombre: this.formulario.nombre,
 							apellido: this.formulario.apellido,

@@ -2,6 +2,7 @@ const {
 	Pool
 } = require('pg');
 var db = new Pool(require('../config/bd'));
+var bitacora = require('../models/bitacora');
 var error = {
 	error: "Error del servidor"
 }
@@ -19,7 +20,11 @@ module.exports = {
 		await db.query("INSERT INTO centrales (nombrecentrales,tipo,ciudad)" +
 		" VALUES ('" + datos.nombrecentrales+ "', " + datos.tipo + ",'" + datos.ciudad + "' );")
 					.then(() => {
-						res.json(true);
+						bitacora.agregar({
+							fecha:new Date().toLocaleString(),
+							codigoempleado: datos.codigoempleado,
+							descripcion: 'Agrego un nodo bajo el nombre: '+datos.nombrecentrales
+						},res)
 					}).catch((err) => {
 						console.log(''+ err)
 				res.json(error);
@@ -30,7 +35,11 @@ module.exports = {
 		await db.query(query)
 			.then((respuesta) => {
 				if (respuesta.rowCount == 1) {
-					res.json(true);
+					bitacora.agregar({
+						fecha:new Date().toLocaleString(),
+						codigoempleado: datos.codigoempleado,
+						descripcion: 'Edito el nodo: '+datos.id+', Nombre: '+datos.nombrecentrales+', Tipo: '+datos.tipo+', Ciudad: '+datos.ciudad
+					},res)
 				} else {
 					res.json(false);
 				}

@@ -8,7 +8,7 @@
         },
         methods: {
             async listar() {
-                await this.axios.get("http://localhost:3000/REST/Centrales/Listar")
+                await this.axios.get("/REST/Centrales/Listar")
                     .then((response) => {
                         return response.data
                     })

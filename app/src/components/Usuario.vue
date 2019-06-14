@@ -1,5 +1,4 @@
 <script>
-
 	export default {
 		created() {
 			this.listar();

@@ -18,10 +18,10 @@ module.exports = {
 	async agregar(datos, res) {
 		await db.query("INSERT INTO bitacora (codigoempleado,descripcion,fecha)" +
 				" VALUES ('" + datos.codigoempleado + "', '" + datos.descripcion + "', '" + datos.fecha + "') RETURNING *;")
-			.then((respuesta) => {
-				res.json(respuesta.rows[0]);
-			}).catch((err) => {
-				res.json(err+' \n '+datos);
+			.then(() => {
+				res.json(true);
+			}).catch(() => {
+				res.json(error);
 			});
 	}
 }
