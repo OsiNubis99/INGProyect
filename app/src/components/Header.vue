@@ -23,7 +23,7 @@
 </script>
 
 <template>
-    <v-toolbar v-if="perfil != null" v-resize="onResize" :color="perfil.cargo?'green lighten-1 ':'primary lighten-1'" scroll-off-screen clipped-left app>
+    <v-toolbar v-if="perfil != null" v-resize="onResize" :color="perfil.cargo?'green lighten-1 ':'primary lighten-1'" clipped-left app>
       <v-container fill-height fluid pa-0 wrap>
         <v-layout align-center justify-center>
           <v-toolbar-side-icon @click="$store.state.navegacion = !$store.state.navegacion"></v-toolbar-side-icon>

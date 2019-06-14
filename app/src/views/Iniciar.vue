@@ -94,7 +94,7 @@
                         Inicia Sesion
                     </v-card-title>
                     <v-card-text>
-                        <v-text-field v-model="nombreUsuario" @keypress.enter="$document.getElementById(clave).focus()"
+                        <v-text-field v-model="nombreUsuario"
                             label="Nombre de Usuario" :color="error.estado ? 'red lighten-1': 'green lighten-1'"
                             autofocus></v-text-field>
                         <v-text-field @keypress.enter="enviar" id="clave" label="Introduce tu Clave"
@@ -119,7 +119,7 @@
 </template>
 
 <style>
-    .alerta {
+    .alerta{
         z-index: 100;
         position: fixed;
         top: 70px;
